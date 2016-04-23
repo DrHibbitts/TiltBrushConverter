@@ -158,7 +158,7 @@ def add_mesh_to_scene(sdk, scene, mesh):
 
     fbx_mesh.InitControlPoints(len(mesh.v))
     for i, v in enumerate(mesh.v):
-        fbx_mesh.SetControlPointAt(as_fvec4(v, scale=100), i)
+        fbx_mesh.SetControlPointAt(as_fvec4(v, scale=1), i)
 
     layer_elt = create_fbx_layer(
             fbx_mesh, mesh.n, as_fvec4, FbxLayerElementNormal)
@@ -254,7 +254,7 @@ def main():
     if args.output_filename is None:
         args.output_filename = os.path.splitext(args.filename)[0] + '.fbx'
 
-    convertFile(args.filename, args.output_filename, args.add_backface,
+    convertFile((args.filename, args.output_filename), args.add_backface,
                 args.merge_stroke, args.merge_brush, args.weld_verts)
 
     print "Wrote", args.output_filename
