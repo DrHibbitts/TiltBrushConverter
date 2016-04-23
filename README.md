@@ -16,7 +16,4 @@ Usage:
 - Hit the convert button at the bottom. All ticked files will be converted
 
 ToDos:
-- Support OBJ as well as FBX
 - Allow custom naming schemes
-- Loading screens
-- Threading so the processing doesn't lock up the GUI
