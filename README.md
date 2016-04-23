@@ -9,6 +9,7 @@ Requirements:
 Usage:
 - Export some files from Tilt Brush
 - Edit config.py to point at the relevant paths on your Computer
+  - If your python is 64 bit use the _x64 autodesk folder otherwise use _x86
 - Run TiltBrushConverter.py (This will eventually support FBX or OBJ, currently will just got to FBX mode)
 - Select exported Tilt Brush files you want to convert
 - Set the export options to your liking
@@ -17,3 +18,5 @@ Usage:
 ToDos:
 - Support OBJ as well as FBX
 - Allow custom naming schemes
+- Loading screens
+- Threading so the processing doesn't lock up the GUI
