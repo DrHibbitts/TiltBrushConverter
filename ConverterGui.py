@@ -3,6 +3,8 @@ from glob import glob
 import sys, os
 import convert_to_fbx
 import config
+import multiprocessing as mp
+import functools
 
 class QListWidget(QtGui.QListView):
     item_checked = QtCore.Signal(str, bool)
@@ -170,12 +172,14 @@ class FBXConvertGUI(QtGui.QWidget):
         outPath = self.exportPath.text().strip() if not len(self.outputPath.text().strip()) else self.outputPath.text().strip()
         if not os.path.exists(outPath):
             os.mkdir(outPath)
-        for file in files:
-            outFile = os.path.join(outPath,file[0] + '.fbx')
-            convert_to_fbx.convertFile(file[1], outFile,
-                                       self.add_backface.isChecked(), self.merge_stroke.isChecked(),
-                                       self.merge_brush.isChecked(), self.weld_verts.isChecked())
-            print "Wrote: {}".format(outFile)
+        parPool = mp.Pool(mp.cpu_count() - 1)
+        inFiles = [file[1] for file in files]
+        outFiles = [os.path.join(outPath, file[0] + '.fbx') for file in files]
+        parPool.map_async(functools.partial(convert_to_fbx.convertFile,
+                                            add_backface=self.add_backface.isChecked(),
+                                            merge_stroke=self.merge_stroke.isChecked(),
+                                            merge_brush=self.merge_brush.isChecked(),
+                                            weld_verts=self.weld_verts.isChecked()), zip(inFiles, outFiles))
 
 def run(type):
     app = QtGui.QApplication(sys.argv)

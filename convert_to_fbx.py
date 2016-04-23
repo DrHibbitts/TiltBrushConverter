@@ -202,7 +202,8 @@ def add_mesh_to_scene(sdk, scene, mesh):
 # main
 # ----------------------------------------------------------------------
 
-def convertFile(filename, output_filename, add_backface, merge_stroke, merge_brush, weld_verts):
+def convertFile(files, add_backface, merge_stroke, merge_brush, weld_verts):
+    filename, output_filename = files
     meshes = list(iter_meshes(filename))
     for mesh in meshes:
         mesh.remove_degenerate()
@@ -253,7 +254,8 @@ def main():
     if args.output_filename is None:
         args.output_filename = os.path.splitext(args.filename)[0] + '.fbx'
 
-    convertFile(*[getattr(args, x) for x in ['filename', 'output_filename', 'add_backface', 'merge_stroke', 'merge_brush', 'weld_verts']])
+    convertFile(args.filename, args.output_filename, args.add_backface,
+                args.merge_stroke, args.merge_brush, args.weld_verts)
 
     print "Wrote", args.output_filename
 
