@@ -82,8 +82,14 @@ class OBJConvertGUI(QtGui.QWidget):
         parPool = mp.Pool(mp.cpu_count() - 1)
         inFiles = [file[1] for file in files]
         outFiles = [os.path.join(outPath, file[0] + '.obj') for file in files]
-        parPool.map_async(functools.partial(convert_to_obj.convertFile,
-                                            cooked=self.cooked.isChecked()), zip(inFiles, outFiles))
+        progressBar = QtGui.QProgressDialog("Converting Files...", "Cancel", 0, len(outFiles), self)
+        progressBar.setWindowModality(QtCore.Qt.WindowModal)
+        progressBar.show()
+        for i, _ in enumerate(parPool.imap_unordered(functools.partial(convert_to_obj.convertFile,
+                                                                       cooked=self.cooked.isChecked()),
+                                                     zip(inFiles, outFiles))):
+            progressBar.setValue(i)
+        progressBar.setValue(len(outFiles))
 
 def main():
     app = QtGui.QApplication(sys.argv)
